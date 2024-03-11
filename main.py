@@ -29,10 +29,10 @@ print(p)
 # [2]
 # Создание таблицы r(pi,j) которая в середине 134 страницы Сон Яна
 r = {}
-for pi in p.keys():
+for pi in p.keys():   # строка
   print()
   r[pi] = {}
-  for j in range(pi):
+  for j in range(pi): # столбец
     right = (a**(j*(q-1)//pi))%q
     r[pi][j] = int(right)
     print(f"r({pi},{j}) = {r[pi][j]}")
@@ -43,13 +43,13 @@ print()
 k = [] # Остатки от деления
 m = [] # Модули
 # [a-.]
-for pi in p.keys():
-  ai = p[pi]
+for pi in p.keys(): # строки
+  ai = p[pi]   # степень простого множителя
   bj = b
   x = 0
   # [i,ii,...]
-  for j in range(ai):
-    # print(f"Итерация №{j} для Pi={pi}")
+  for j in range(ai): # цикл идёт до степени простого множителя
+    print(f"Итерация №{j} для Pi={pi}")
     # Левая часть которую можем высчитать
     left = (bj**((q-1)//pi**(j+1))) % q
     # Находим, при каком значении второго индекса (xj) r(pi,xj) совпадет с результатом вычисления

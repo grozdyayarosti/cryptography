@@ -31,4 +31,4 @@ def China(k,m):
 
 # Получение ключа по значению
 def GetKey(dic, v):
-  return [i for i in dic if dic[i]==v][0]
+  return [i for i in dic if dic[i]==v] [0] # Выводит номер столбца с совпавшим значением
