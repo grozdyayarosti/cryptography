@@ -1,69 +1,13 @@
-from funcs import prim, GetKey, China
+from funcs import prime_factorization, Chinese_theorem, q, b, a, create_r_table, logarithm_calc
 
-a = 2
-b = 62
-q = 181
-# Ответ 100 (работает)
+# Разложим q-1 на простые множители
+prime_factors = prime_factorization(q - 1)
 
-# a = 2
-# b = 28
-# q = 37
-# Ответ 34 (работает)
+# Составим таблицы r(pi,j) для поля
+r_table = create_r_table(prime_factors)
 
-# a = 2
-# b = 7
-# q = 61
-# Ответ 49 (работает)
+# Находим отдельные дискретные логарифмы x=log a(b) mod q
+remains,modules = logarithm_calc(r_table, prime_factors)
 
-# a = 3
-# b = 11
-# q = 17
-# Ответ 7 (работает)
-
-
-# [1]
-# Разложение на простые множители
-p = prim(q-1)
-print(p)
-
-# [2]
-# Создание таблицы r(pi,j) которая в середине 134 страницы Сон Яна
-r = {}
-for pi in p.keys():   # строка
-  print()
-  r[pi] = {}
-  for j in range(pi): # столбец
-    right = (a**(j*(q-1)//pi))%q
-    r[pi][j] = int(right)
-    print(f"r({pi},{j}) = {r[pi][j]}")
-print()
-
-# [3-1]
-# Вычисление отдельных дискретных логарифмов
-k = [] # Остатки от деления
-m = [] # Модули
-# [a-.]
-for pi in p.keys(): # строки
-  ai = p[pi]   # степень простого множителя
-  bj = b
-  x = 0
-  # [i,ii,...]
-  for j in range(ai): # цикл идёт до степени простого множителя
-    print(f"Итерация №{j} для Pi={pi}")
-    # Левая часть которую можем высчитать
-    left = (bj**((q-1)//pi**(j+1))) % q
-    # Находим, при каком значении второго индекса (xj) r(pi,xj) совпадет с результатом вычисления
-    xj = GetKey(r[pi], left)
-    # Добавляем к сумме формируя итоговый X
-    x += xj*pi**j
-    # Подготовка к новой итерации
-    bj = int(bj *  pow(a,-xj*(pi**j), q))
-  # [Последняя строка a-.]
-  # Смотрим и сохраняем итоговое уравнение
-  print(f"X = {x} mod {pi**ai}")
-  k.append(x)
-  m.append(pi**ai)
-print()
-
-# Решаем систему уравнений по китайской теореме об остатках
-print(f"Факторизованная степень: {China(k,m)}")
+# Решаем систему уравнений с помощью китайской теоремы об остатках
+Chinese_theorem(remains, modules)
