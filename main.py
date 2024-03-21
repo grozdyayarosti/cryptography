@@ -1,26 +1,53 @@
-from math import sqrt, gcd, log,e
-from funcs import CreateFB, FindX, FindY, Destringify, Qs, Stringify, Combine
+from math import sqrt, gcd, log, e, floor
+from funcs import FB_calc, get_x, get_y, Q_to_int, get_Q, Q_to_string, get_null_combination
 
-N = 540143
-# BaseEdge = 500
-# NumRange = 5000
-Ln = int(e**(sqrt(log(N)*log(log(N)))))
-NumRange = Ln*2
-BaseEdge = Ln//2
+N = 1829
+# N = 10403
+print(f'Факторизуемое число\n{N = }\n')
 
-FB = CreateFB(BaseEdge,N)
-print(f"Факторная база: {FB}")
-Qpre = Qs(NumRange, N, FB)
-Qstr = Stringify(Qpre, FB)
-Qset = Combine(list(Qstr.values()),FB)
-Qpost = Destringify(Qset, Qstr, Qpre)
-print(f"Числа - участники квадрата: {list(Qpost.keys())}")
-x = FindX(list(Qpost.keys()))
-print(f"x = {x}")
-y = FindY(list(Qpost.values()), N, FB)
-print(f"y = {y}")
+##########################
+# Определение границ     #
+##########################
+Ln_degree = sqrt(
+    log(N) * log(log(N)))
+Ln = int(e ** Ln_degree)
+left_border = Ln // 2
+right_border = Ln * 2
 
-xmy = x-y
-xpy = x+y
+################################
+# Формирование факторной базы  #
+################################
+FB = FB_calc(left_border, N)
+print(f"Факторная база: \n{FB = }")
 
-print(f"p = {gcd(xmy,N)}; q = {gcd(xpy,N)}")
+##########################
+# Нахождение корня(a=)   #
+##########################
+a = floor(sqrt(N))
+print(f"{a = }\n")
+
+##################################
+# Получение гладких по ФБ корней #
+##################################
+Q_int = get_Q(FB, a, right_border, N)
+
+#######################################
+# Отбор чисел - участников квадрата   #
+#######################################
+Q_string = Q_to_string(Q_int, FB) # конвертация Q в бинарную строку
+Q_null_combs = get_null_combination(Q_string, FB) # Получение бинарной комбинации, при которой ксор нулевой
+Q = Q_to_int(Q_null_combs, Q_string, Q_int) # Обратная конвертация из бинарных строк в инт разложение
+print(f"Числа - участники квадрата:\n{list(Q.keys())}\n")
+
+##########################
+# Нахождение x y         #
+##########################
+x = get_x(Q)
+y = get_y(Q, FB)
+print(f"{x = }")
+print(f"{y = }")
+
+##########################
+# Через НОД находим p q  #
+##########################
+print(f"\nРезультат:\np = {gcd(x-y, N)} q = {gcd(x+y, N)}")
